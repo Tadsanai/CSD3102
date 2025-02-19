@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
+import AppLoading from "expo-app-loading";
+import { useFonts, Sarabun_400Regular } from "@expo-google-fonts/sarabun";
+
+import Wheel from "./src/components/Wheel";
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Sarabun_400Regular,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Wheel />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    // ลบการตั้งค่าฟอนต์ที่รองรับภาษาไทย
   },
 });

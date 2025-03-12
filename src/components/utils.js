@@ -1,6 +1,6 @@
 export function getWheelPaths(numSegments, colors) {
   const paths = [];
-  const angle = 360 / numSegments; // แบ่ง 360 องศา ตามจำนวนช่อง
+  const angle = 360 / numSegments;
 
   for (let i = 0; i < numSegments; i++) {
     const startAngle = i * angle;

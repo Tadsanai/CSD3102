@@ -34,10 +34,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity onPress={handleMenuPress} style={styles.menuButton}>
           <Ionicons name="menu" size={30} color="white" />
         </TouchableOpacity>
-        <Image
-          source={require("../assets/icon.png")} // เพิ่มไอคอนล็อกอิน
-          style={styles.icon}
-        />
+        <Image source={require("../assets/icon.png")} style={styles.icon} />
         <Text style={styles.headerText}>เข้าสู่ระบบ</Text>
       </View>
       <TextInput

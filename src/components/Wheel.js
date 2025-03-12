@@ -65,7 +65,6 @@ export default function Wheel() {
   };
 
   const handleSpin = () => {
-    // หยุดการหมุนแบบพรีวิว
     cancelAnimation(rotation);
 
     const randomTurns = Math.floor(Math.random() * 5) + 3;

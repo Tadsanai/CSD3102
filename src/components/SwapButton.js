@@ -8,7 +8,6 @@ export default function SwapButton({ onPress }) {
     </TouchableOpacity>
   );
 }
-
 const styles = StyleSheet.create({
   swapButton: {
     backgroundColor: "#007bff",

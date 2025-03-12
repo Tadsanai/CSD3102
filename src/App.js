@@ -13,7 +13,7 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ headerShown: false }} // ซ่อน header ของหน้าล็อกอิน
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="Wheel" component={Wheel} />
       </Stack.Navigator>

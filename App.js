@@ -27,6 +27,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
-    // ลบการตั้งค่าฟอนต์ที่รองรับภาษาไทย
   },
 });

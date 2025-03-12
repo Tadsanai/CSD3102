@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import Svg, { G, Path, Circle, Text as SvgText } from "react-native-svg";
-
 import Animated, {
   useSharedValue,
   withSpring,
@@ -21,8 +20,9 @@ import Animated, {
   cancelAnimation,
 } from "react-native-reanimated";
 import { getWheelPaths } from "./utils";
+import SwapButton from "./SwapButton"; // Import SwapButton
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const WHEEL_SIZE = width * 0.8;
 
 const defaultSegments = ["A", "B", "C", "D", "E", "F"];
@@ -39,6 +39,7 @@ export default function Wheel() {
   const rotation = useSharedValue(0);
   const [segments, setSegments] = useState(defaultSegments);
   const [inputText, setInputText] = useState("");
+  const [history, setHistory] = useState([]); // State to store history
 
   useEffect(() => {
     // เริ่มการหมุนแบบพรีวิวเมื่อคอมโพเนนต์ถูกเรนเดอร์ครั้งแรก
@@ -47,7 +48,7 @@ export default function Wheel() {
 
   const completeSpinning = (selectedIndex) => {
     const result = segments[selectedIndex];
-    const resultColor = colors[selectedIndex % colors.length];
+    setHistory([...history, result]); // Update history
     Alert.alert(
       "ผลลัพธ์",
       result,
@@ -106,6 +107,11 @@ export default function Wheel() {
     }
   };
 
+  const handleSwapSegments = () => {
+    const swappedSegments = [...segments].reverse();
+    setSegments(swappedSegments);
+  };
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }],
   }));
@@ -160,9 +166,6 @@ export default function Wheel() {
                 })}
               </G>
 
-              {/* ตัวชี้ตำแหน่งที่หยุด (สามเหลี่ยม) - ย้ายไปทางขวานอกวงล้อ */}
-              <Path d="M 150,-10 L 150,10 L 170,0 Z" fill="white" />
-
               {/* ปุ่มหมุนเป็นจุดสีดำตรงกลางวงล้อ */}
               <Circle cx="0" cy="0" r="15" fill="white" />
             </Svg>
@@ -172,16 +175,17 @@ export default function Wheel() {
               <Circle cx="0" cy="0" r="15" fill="white" />
             </TouchableOpacity>
           </Animated.View>
-        </View>
 
-        {/* เพิ่มลูกศรที่แสดงว่าได้ตัวเลือกสุ่มตัวไหน */}
-        <View style={styles.arrowContainer}>
-          <Svg width="30" height="30" viewBox="0 0 30 30">
-            <Path d="M 15 0 L 30 30 L 0 30 Z" fill="black" />{" "}
-            {/* เปลี่ยนสีลูกศรเป็นสีดำ */}
+          {/* ตัวชี้ตำแหน่งที่หยุด (สามเหลี่ยม) - ย้ายไปทางขวานอกวงล้อ */}
+          <Svg
+            style={styles.pointer}
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+          >
+            <Path d="M 15 0 L 30 30 L 0 30 Z" fill="black" />
           </Svg>
         </View>
-
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -193,7 +197,6 @@ export default function Wheel() {
             <Text style={styles.addButtonText}>เพิ่ม</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.listContainer}>
           {segments.map((item, index) => (
             <View key={index} style={styles.listItem}>
@@ -205,6 +208,15 @@ export default function Wheel() {
                 <Text style={styles.removeButtonText}>🗑</Text>
               </TouchableOpacity>
             </View>
+          ))}
+        </View>
+        <SwapButton onPress={handleSwapSegments} /> {/* Add SwapButton */}
+        <View style={styles.historyContainer}>
+          <Text style={styles.historyTitle}>ประวัติผลลัพธ์:</Text>
+          {history.map((item, index) => (
+            <Text key={index} style={styles.historyText}>
+              {item}
+            </Text>
           ))}
         </View>
       </ScrollView>
@@ -273,11 +285,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  arrowContainer: {
+  pointer: {
     position: "absolute",
-    bottom: "62%", // ปรับตำแหน่งใ    ห้ลูกศรอยู่ด้านล่าง
-    left: "46%",
-    zIndex: 2,
+    top: "97%",
+    left: WHEEL_SIZE / 2 - 15,
   },
   inputContainer: {
     flexDirection: "row",
@@ -328,4 +339,24 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   removeButtonText: { color: "white", fontSize: 16 },
+  historyContainer: {
+    marginTop: 20,
+    width: "80%",
+    backgroundColor: "#222",
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#555",
+  },
+  historyTitle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  historyText: {
+    color: "white",
+    fontSize: 14,
+    marginBottom: 5,
+  },
 });

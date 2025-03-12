@@ -8,6 +8,7 @@ import {
   Alert,
   Image,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons"; // Import Ionicons for the hamburger menu
 
 export default function Login({ navigation }) {
   const [username, setUsername] = useState("");
@@ -23,9 +24,16 @@ export default function Login({ navigation }) {
     }
   };
 
+  const handleMenuPress = () => {
+    navigation.navigate("Login"); // Navigate to the login screen
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={handleMenuPress} style={styles.menuButton}>
+          <Ionicons name="menu" size={30} color="white" />
+        </TouchableOpacity>
         <Image
           source={require("../assets/icon.png")} // เพิ่มไอคอนล็อกอิน
           style={styles.icon}
@@ -62,12 +70,20 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: "20px",
+  },
+  menuButton: {
+    position: "absolute",
+    right: 10,
+    top: 10,
   },
   icon: {
     width: 30,
     height: 30,
     marginRight: 10,
+    marginTop: 10,
   },
   headerText: {
     color: "white",
@@ -75,7 +91,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    width: "80%",
     borderWidth: 1,
     borderColor: "#666",
     borderRadius: 5,
